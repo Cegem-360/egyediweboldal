@@ -1,0 +1,6 @@
+brand,model,year,price,mileage,engine,fuel_type,transmission,color,description,image
+Mercedes-Benz,GLC 300,2024,35000000,5000,2.0 Turbo,Benzin,Automata,Fekete,Luxus SUV kiváló állapotban,https://via.placeholder.com/800x600
+BMW,X5,2023,42000000,12000,3.0 TDI,Dízel,Automata,Fehér,Sport csomag teljes felszereltséggel,https://via.placeholder.com/800x600
+Audi,Q7,2024,38000000,8000,3.0 TFSI,Benzin,Automata,Szürke,7 személyes családi SUV,https://via.placeholder.com/800x600
+Mercedes-Benz,E-Class,2023,28000000,15000,2.0 TDI,Dízel,Automata,Ezüst,Elegáns sedan üzleti célra,https://via.placeholder.com/800x600
+BMW,3 Series,2024,25000000,3000,2.0 Turbo,Benzin,Manuális,Kék,Sportos sedan M-sport csomaggal,https://via.placeholder.com/800x600
