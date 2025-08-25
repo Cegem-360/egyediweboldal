@@ -2,14 +2,21 @@
 
 namespace App\Filament\Admin\Resources;
 
-use App\Filament\Admin\Resources\UserResource\Pages;
-use App\Models\User;
 use BackedEnum;
-use Filament\Schemas;
-use Filament\Schemas\Schema;
-use Filament\Resources\Resource;
+use Filament\Forms;
+use App\Models\User;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Schemas\Schema;
+use Filament\Actions\EditAction;
+use Filament\Resources\Resource;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Forms\Components\Select;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Section;
+use App\Filament\Admin\Resources\UserResource\Pages;
 
 class UserResource extends Resource
 {
@@ -29,21 +36,21 @@ class UserResource extends Resource
     {
         return $schema
             ->components([
-                Schemas\Components\Section::make('Felhasználó adatai')
+                Section::make('Felhasználó adatai')
                     ->schema([
-                        Schemas\Components\TextInput::make('name')
+                        TextInput::make('name')
                             ->label('Név')
                             ->required()
                             ->maxLength(255),
                         
-                        Schemas\Components\TextInput::make('email')
+                        TextInput::make('email')
                             ->label('E-mail')
                             ->email()
                             ->required()
                             ->unique(ignoreRecord: true)
                             ->maxLength(255),
                         
-                        Schemas\Components\Select::make('role')
+                        Select::make('role')
                             ->label('Szerepkör')
                             ->options([
                                 'customer' => 'Vásárló',
@@ -52,6 +59,14 @@ class UserResource extends Resource
                             ])
                             ->required()
                             ->default('customer'),
+                        
+                        TextInput::make('password')
+                            ->label('Jelszó')
+                            ->password()
+                            ->dehydrateStateUsing(fn ($state) => filled($state) ? bcrypt($state) : null)
+                            ->required(fn (string $context): bool => $context === 'create')
+                            ->dehydrated(fn ($state) => filled($state))
+                            ->maxLength(255),
                     ])
                     ->columns(2),
             ]);
@@ -96,10 +111,13 @@ class UserResource extends Resource
                 //
             ])
             ->actions([
-                //
+                EditAction::make(),
+                DeleteAction::make(),
             ])
             ->bulkActions([
-                //
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                ]),
             ]);
     }
 
@@ -114,6 +132,8 @@ class UserResource extends Resource
     {
         return [
             'index' => Pages\ListUsers::route('/'),
+            'create' => Pages\CreateUser::route('/create'),
+            'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
     }
 
